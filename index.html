@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Los 7 componentes de un Skill de Claude — Ascanio.IA</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #1e1e1e;
+      --text: #e8e8e8;
+      --muted: #666;
+      --accent: #d4f56a;
+      --accent-dim: rgba(212, 245, 106, 0.08);
+      --font: 'Inter', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 17px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 80px clamp(24px, 8vw, 120px);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(212,245,106,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 32px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.6s ease forwards 0.2s;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      max-width: 820px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.7s ease forwards 0.4s;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      margin-top: 28px;
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 540px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.7s ease forwards 0.6s;
+    }
+
+    .hero-scroll {
+      margin-top: 64px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 1s;
+    }
+
+    .hero-scroll span {
+      display: inline-block;
+      width: 32px;
+      height: 1px;
+      background: var(--muted);
+    }
+
+    /* COMPONENTS GRID */
+    .section {
+      padding: 100px clamp(24px, 8vw, 120px);
+    }
+
+    .section-label {
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 64px;
+    }
+
+    .components {
+      display: grid;
+      gap: 2px;
+    }
+
+    .component {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 32px;
+      align-items: start;
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .component.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .component:last-child {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .component-num {
+      font-size: 13px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      padding-top: 4px;
+    }
+
+    .component-content {}
+
+    .component-tag {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(212,245,106,0.15);
+      border-radius: 4px;
+      padding: 3px 10px;
+      margin-bottom: 16px;
+    }
+
+    .component h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .component p {
+      color: #999;
+      font-size: 0.95rem;
+      max-width: 560px;
+      line-height: 1.75;
+    }
+
+    /* HIGHLIGHT — el componente estrella */
+    .component.highlight {
+      background: var(--accent-dim);
+      border: 1px solid rgba(212,245,106,0.12);
+      border-radius: 12px;
+      padding: 40px;
+      margin: 8px 0;
+      grid-column: 1 / -1;
+    }
+
+    .component.highlight .component-tag {
+      background: rgba(212,245,106,0.15);
+    }
+
+    .component.highlight h2 {
+      font-size: 1.8rem;
+    }
+
+    .component.highlight p {
+      color: #bbb;
+    }
+
+    /* CODE BLOCK */
+    .code-block {
+      margin-top: 24px;
+      background: #0d0d0d;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .code-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
+    .code-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .code-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .code-block pre {
+      padding: 20px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.7;
+      color: #bbb;
+      overflow-x: auto;
+    }
+
+    .code-block pre .bad { color: #ff6b6b; }
+    .code-block pre .good { color: var(--accent); }
+    .code-block pre .comment { color: #555; }
+
+    /* CTA */
+    .cta-section {
+      padding: 100px clamp(24px, 8vw, 120px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 32px;
+    }
+
+    .cta-section h2 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      max-width: 640px;
+      line-height: 1.2;
+    }
+
+    .cta-section h2 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .cta-section p {
+      color: var(--muted);
+      max-width: 480px;
+      font-size: 0.95rem;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent);
+      color: #0a0a0a;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.02em;
+      padding: 14px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .cta-btn:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 40px clamp(24px, 8vw, 120px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    footer a:hover { color: var(--text); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 600px) {
+      .component {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .component-num { display: none; }
+      .component.highlight { padding: 28px 20px; }
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-label">Ascanio.IA — Guía gratuita</p>
+    <h1>Los <em>7 componentes</em> de un Skill de Claude que realmente funciona</h1>
+    <p class="hero-sub">La mayoría usa solo 3. Aquí están los 7 — y por qué el que más se ignora es el que lo decide todo.</p>
+    <div class="hero-scroll">
+      <span></span>
+      Scroll para ver los componentes
+    </div>
+  </section>
+
+  <!-- COMPONENTS -->
+  <section class="section">
+    <p class="section-label">Los 7 componentes</p>
+    <div class="components">
+
+      <div class="component">
+        <div class="component-num">01</div>
+        <div class="component-content">
+          <span class="component-tag">Identidad</span>
+          <h2>YAML Frontmatter</h2>
+          <p>El carnet de identidad del skill. Le dice a Claude cómo se llama y cuándo debe cargarlo. Sin frontmatter claro, Claude ignora el skill por completo — aunque el resto esté perfecto.</p>
+        </div>
+      </div>
+
+      <div class="component">
+        <div class="component-num">02</div>
+        <div class="component-content">
+          <span class="component-tag">El cerebro</span>
+          <h2>Instructions Block</h2>
+          <p>Le dices exactamente qué hacer y qué nunca hacer dentro de este skill. Cuanto más específico, menos margen para la improvisación.</p>
+        </div>
+      </div>
+
+      <div class="component">
+        <div class="component-num">03</div>
+        <div class="component-content">
+          <span class="component-tag">El atajo</span>
+          <h2>Examples Section</h2>
+          <p>Muestra a Claude un input de ejemplo y el output exacto que esperas. Dos ejemplos bien elegidos reducen los errores a la mitad.</p>
+        </div>
+      </div>
+
+      <div class="component">
+        <div class="component-num">04</div>
+        <div class="component-content">
+          <span class="component-tag">Contexto</span>
+          <h2>Supporting Files</h2>
+          <p>Plantillas, scripts, documentos de referencia. En lugar de pegar todo en un bloque, enlaza archivos externos. El skill se mantiene limpio y el contexto siempre actualizado.</p>
+        </div>
+      </div>
+
+      <!-- COMPONENTE ESTRELLA -->
+      <div class="component highlight">
+        <div class="component-num">05</div>
+        <div class="component-content">
+          <span class="component-tag">El más ignorado</span>
+          <h2>Trigger Rule</h2>
+          <p>Claude lee esta descripción para decidir si debe activar el skill o no. Es el componente que más se ignora — y el que decide si todo lo demás funciona.</p>
+          <p style="margin-top:12px;">Si es vaga, Claude la ignora. Si es genérica, carga el skill cuando no toca. Si es precisa, actúa exactamente cuando debe.</p>
+          <div class="code-block">
+            <div class="code-block-header">
+              <div class="code-dots"><span></span><span></span><span></span></div>
+              trigger_rule · ejemplo
+            </div>
+            <pre><span class="comment"># Mal — demasiado vago</span>
+<span class="bad">trigger: "usar cuando el usuario pida ayuda con marketing"</span>
+
+<span class="comment"># Bien — preciso y accionable</span>
+<span class="good">trigger: |
+  Activar cuando el usuario pida un post para LinkedIn.
+  NO activar para emails, newsletters o contenido para Instagram.
+  Señales: menciona "LinkedIn", "post", "publicación profesional".</span></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="component">
+        <div class="component-num">06</div>
+        <div class="component-content">
+          <span class="component-tag">El mata-errores</span>
+          <h2>Negative Instructions</h2>
+          <p>Dile a Claude qué no hacer. Esta sección previene el 80% de los outputs incorrectos. Si hay algo que Claude hace por defecto y tú no quieres, aquí es donde se corta.</p>
+        </div>
+      </div>
+
+      <div class="component">
+        <div class="component-num">07</div>
+        <div class="component-content">
+          <span class="component-tag">El multiplicador</span>
+          <h2>Composability</h2>
+          <p>Los skills pueden trabajar juntos. Claude puede cargar varios a la vez. Un skill de voz + un skill de formato + un skill de canal = un sistema que trabaja como tú, no como Claude por defecto.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>¿Quieres que Claude trabaje <em>exactamente</em> como tú quieres?</h2>
+    <p>Escríbeme <strong style="color:var(--text)">SKILL</strong> en los comentarios del post de LinkedIn y te mando esta guía + ejemplos reales.</p>
+    <a class="cta-btn" href="https://www.linkedin.com/in/joseascanio" target="_blank">
+      Ir al post de LinkedIn →
+    </a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>Ascanio.IA — Jose Ascanio</span>
+    <a href="https://www.linkedin.com/in/joseascanio" target="_blank">LinkedIn</a>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, entry.target.dataset.delay || 0);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.component').forEach((el, i) => {
+      el.dataset.delay = i * 80;
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>
