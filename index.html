@@ -327,6 +327,128 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* CHEATSHEET */
+    .cheatsheet-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cheatsheet-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .cheat-card {
+      background: var(--surface);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: background 0.2s ease;
+    }
+
+    .cheat-card:hover {
+      background: #161616;
+    }
+
+    .cheat-num {
+      font-size: 11px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      font-family: var(--mono);
+    }
+
+    .cheat-tag {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .cheat-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+
+    .cheat-card p {
+      font-size: 0.85rem;
+      color: #777;
+      line-height: 1.6;
+    }
+
+    .highlight-card {
+      background: var(--accent-dim) !important;
+      border: 1px solid rgba(212,245,106,0.12);
+    }
+
+    .highlight-card h3 {
+      color: var(--accent);
+    }
+
+    .highlight-card p {
+      color: #aaa;
+    }
+
+    .accent-tag {
+      color: var(--accent) !important;
+    }
+
+    /* AUTHOR */
+    .author-section {
+      padding: 100px clamp(24px, 8vw, 120px);
+      border-top: 1px solid var(--border);
+    }
+
+    .author-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 40px;
+      max-width: 640px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      min-width: 72px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid rgba(212,245,106,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+
+    .author-info {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .author-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .author-bio {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 460px;
+    }
+
     /* RESPONSIVE */
     @media (max-width: 600px) {
       .component {
@@ -335,6 +457,8 @@
       }
       .component-num { display: none; }
       .component.highlight { padding: 28px 20px; }
+      .author-card { flex-direction: column; gap: 24px; }
+      .cheatsheet-grid { grid-template-columns: 1fr; }
     }
   </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -440,13 +564,67 @@
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="cta-section">
-    <h2>¿Quieres que Claude trabaje <em>exactamente</em> como tú quieres?</h2>
-    <p>Escríbeme <strong style="color:var(--text)">SKILL</strong> en los comentarios del post de LinkedIn y te mando esta guía + ejemplos reales.</p>
-    <a class="cta-btn" href="https://www.linkedin.com/in/joseascanio" target="_blank">
-      Ir al post de LinkedIn →
-    </a>
+  <!-- CHEATSHEET -->
+  <section class="section cheatsheet-section">
+    <p class="section-label">Referencia rápida — guarda esta sección</p>
+    <div class="cheatsheet-grid">
+      <div class="cheat-card">
+        <span class="cheat-num">01</span>
+        <span class="cheat-tag">Identidad</span>
+        <h3>YAML Frontmatter</h3>
+        <p>El ID del skill. Sin esto, Claude lo ignora.</p>
+      </div>
+      <div class="cheat-card">
+        <span class="cheat-num">02</span>
+        <span class="cheat-tag">El cerebro</span>
+        <h3>Instructions Block</h3>
+        <p>Qué hacer y qué nunca hacer. Cuanto más específico, mejor.</p>
+      </div>
+      <div class="cheat-card">
+        <span class="cheat-num">03</span>
+        <span class="cheat-tag">El atajo</span>
+        <h3>Examples Section</h3>
+        <p>Input → output esperado. Dos ejemplos reducen errores a la mitad.</p>
+      </div>
+      <div class="cheat-card">
+        <span class="cheat-num">04</span>
+        <span class="cheat-tag">Contexto</span>
+        <h3>Supporting Files</h3>
+        <p>Enlaza archivos externos. No lo pegues todo en un bloque.</p>
+      </div>
+      <div class="cheat-card highlight-card">
+        <span class="cheat-num">05</span>
+        <span class="cheat-tag accent-tag">El más ignorado</span>
+        <h3>Trigger Rule</h3>
+        <p>Le dice a Claude cuándo activarse — y cuándo no. Si es vaga, todo falla.</p>
+      </div>
+      <div class="cheat-card">
+        <span class="cheat-num">06</span>
+        <span class="cheat-tag">Mata-errores</span>
+        <h3>Negative Instructions</h3>
+        <p>Lo que Claude no debe hacer. Previene el 80% de outputs incorrectos.</p>
+      </div>
+      <div class="cheat-card">
+        <span class="cheat-num">07</span>
+        <span class="cheat-tag">Multiplicador</span>
+        <h3>Composability</h3>
+        <p>Los skills se combinan. Voz + formato + canal = sistema completo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CIERRE PERSONAL -->
+  <section class="author-section">
+    <div class="author-card">
+      <div class="author-avatar">JA</div>
+      <div class="author-info">
+        <p class="author-name">Jose Ascanio</p>
+        <p class="author-bio">Consultor de IA para empresas con procesos desordenados. Método ODIN: primero el orden, luego la automatización.</p>
+        <a class="cta-btn" href="https://www.linkedin.com/in/joseascanio" target="_blank">
+          Seguir en LinkedIn →
+        </a>
+      </div>
+    </div>
   </section>
 
   <!-- FOOTER -->
