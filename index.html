@@ -449,6 +449,27 @@
       max-width: 460px;
     }
 
+    .author-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .social-link {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .social-link:hover { color: var(--text); }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
     /* RESPONSIVE */
     @media (max-width: 600px) {
       .component {
@@ -620,9 +641,11 @@
       <div class="author-info">
         <p class="author-name">Jose Ascanio</p>
         <p class="author-bio">Consultor de IA para empresas con procesos desordenados. Método ODIN: primero el orden, luego la automatización.</p>
-        <a class="cta-btn" href="https://www.linkedin.com/in/joseascanio" target="_blank">
-          Seguir en LinkedIn →
-        </a>
+        <div class="author-links">
+          <a class="cta-btn" href="https://www.linkedin.com/in/joseascanioc/" target="_blank">Seguir en LinkedIn →</a>
+          <a class="social-link" href="https://www.instagram.com/ascanio.ia/" target="_blank">Instagram</a>
+          <a class="social-link" href="https://www.tiktok.com/@ascanioia" target="_blank">TikTok</a>
+        </div>
       </div>
     </div>
   </section>
@@ -630,7 +653,11 @@
   <!-- FOOTER -->
   <footer>
     <span>Ascanio.IA — Jose Ascanio</span>
-    <a href="https://www.linkedin.com/in/joseascanio" target="_blank">LinkedIn</a>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/joseascanioc/" target="_blank">LinkedIn</a>
+      <a href="https://www.instagram.com/ascanio.ia/" target="_blank">Instagram</a>
+      <a href="https://www.tiktok.com/@ascanioia" target="_blank">TikTok</a>
+    </div>
   </footer>
 
   <script>
