@@ -405,65 +405,145 @@
     .author-section {
       padding: 100px clamp(24px, 8vw, 120px);
       border-top: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
     }
 
-    .author-card {
+    .author-section::before {
+      content: '';
+      position: absolute;
+      bottom: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(212,245,106,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .author-top {
       display: flex;
       align-items: flex-start;
-      gap: 40px;
+      gap: 28px;
+      margin-bottom: 56px;
       max-width: 640px;
     }
 
     .author-avatar {
-      width: 72px;
-      height: 72px;
-      min-width: 72px;
+      width: 64px;
+      height: 64px;
+      min-width: 64px;
       border-radius: 50%;
       background: var(--accent-dim);
-      border: 1px solid rgba(212,245,106,0.2);
+      border: 1px solid rgba(212,245,106,0.25);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: var(--accent);
       letter-spacing: 0.05em;
     }
 
-    .author-info {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .author-info { display: flex; flex-direction: column; gap: 8px; }
 
     .author-name {
       font-weight: 600;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       letter-spacing: -0.01em;
     }
 
     .author-bio {
       font-size: 0.9rem;
       color: var(--muted);
-      line-height: 1.7;
-      max-width: 460px;
+      line-height: 1.75;
+      max-width: 480px;
     }
 
-    .author-links {
+    /* SOCIAL CARDS */
+    .social-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 760px;
+    }
+
+    .social-card {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 28px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .social-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .social-card.linkedin::before { background: radial-gradient(circle at top left, rgba(10,102,194,0.08), transparent 70%); }
+    .social-card.instagram::before { background: radial-gradient(circle at top left, rgba(225,48,108,0.08), transparent 70%); }
+    .social-card.tiktok::before { background: radial-gradient(circle at top left, rgba(255,255,255,0.04), transparent 70%); }
+
+    .social-card:hover {
+      border-color: #333;
+      background: #141414;
+      transform: translateY(-2px);
+    }
+
+    .social-card:hover::before { opacity: 1; }
+
+    .social-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
+      justify-content: center;
     }
 
-    .social-link {
-      font-size: 0.85rem;
+    .social-card.linkedin .social-card-icon { background: rgba(10,102,194,0.12); }
+    .social-card.instagram .social-card-icon { background: rgba(225,48,108,0.12); }
+    .social-card.tiktok .social-card-icon { background: rgba(255,255,255,0.06); }
+
+    .social-card-icon svg { width: 20px; height: 20px; }
+
+    .social-card-body { display: flex; flex-direction: column; gap: 4px; }
+
+    .social-card-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .social-card-handle {
+      font-size: 0.8rem;
       color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s;
+      font-family: var(--mono);
     }
 
-    .social-link:hover { color: var(--text); }
+    .social-card-arrow {
+      margin-top: auto;
+      font-size: 0.8rem;
+      color: var(--muted);
+      transition: color 0.2s, transform 0.2s;
+      align-self: flex-end;
+    }
+
+    .social-card:hover .social-card-arrow {
+      color: var(--text);
+      transform: translate(2px, -2px);
+    }
 
     .footer-links {
       display: flex;
@@ -478,7 +558,8 @@
       }
       .component-num { display: none; }
       .component.highlight { padding: 28px 20px; }
-      .author-card { flex-direction: column; gap: 24px; }
+      .author-top { flex-direction: column; gap: 20px; }
+      .social-cards { grid-template-columns: 1fr; }
       .cheatsheet-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -636,17 +717,58 @@
 
   <!-- CIERRE PERSONAL -->
   <section class="author-section">
-    <div class="author-card">
+    <div class="author-top">
       <div class="author-avatar">JA</div>
       <div class="author-info">
         <p class="author-name">Jose Ascanio</p>
-        <p class="author-bio">Consultor de IA para empresas con procesos desordenados. Método ODIN: primero el orden, luego la automatización.</p>
-        <div class="author-links">
-          <a class="cta-btn" href="https://www.linkedin.com/in/joseascanioc/" target="_blank">Seguir en LinkedIn →</a>
-          <a class="social-link" href="https://www.instagram.com/ascanio.ia/" target="_blank">Instagram</a>
-          <a class="social-link" href="https://www.tiktok.com/@ascanioia" target="_blank">TikTok</a>
-        </div>
+        <p class="author-bio">Consultor de IA para empresas con procesos desordenados. Método ODIN: primero el orden, luego la automatización. Aquí publico lo que aprendo construyendo en público.</p>
       </div>
+    </div>
+    <div class="social-cards">
+
+      <a class="social-card linkedin" href="https://www.linkedin.com/in/joseascanioc/" target="_blank">
+        <div class="social-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" stroke="#0A66C2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="2" y="9" width="4" height="12" stroke="#0A66C2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="4" cy="4" r="2" stroke="#0A66C2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="social-card-body">
+          <span class="social-card-name">LinkedIn</span>
+          <span class="social-card-handle">@joseascanioc</span>
+        </div>
+        <span class="social-card-arrow">↗</span>
+      </a>
+
+      <a class="social-card instagram" href="https://www.instagram.com/ascanio.ia/" target="_blank">
+        <div class="social-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="20" height="20" rx="5" stroke="#E1306C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="12" r="4" stroke="#E1306C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="17.5" cy="6.5" r="0.5" fill="#E1306C" stroke="#E1306C" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="social-card-body">
+          <span class="social-card-name">Instagram</span>
+          <span class="social-card-handle">@ascanio.ia</span>
+        </div>
+        <span class="social-card-arrow">↗</span>
+      </a>
+
+      <a class="social-card tiktok" href="https://www.tiktok.com/@ascanioia" target="_blank">
+        <div class="social-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="social-card-body">
+          <span class="social-card-name">TikTok</span>
+          <span class="social-card-handle">@ascanioia</span>
+        </div>
+        <span class="social-card-arrow">↗</span>
+      </a>
+
     </div>
   </section>
 
