@@ -5,22 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Los 7 componentes de un Skill de Claude — Ascanio.IA</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #080808;
-      --surface: #101010;
-      --surface2: #141414;
-      --border: #1c1c1c;
-      --border2: #252525;
-      --text: #f0f0f0;
-      --muted: #555;
-      --muted2: #888;
-      --accent: #c8f135;
-      --accent-glow: rgba(200, 241, 53, 0.15);
-      --accent-dim: rgba(200, 241, 53, 0.07);
+      --bg:         #080808;
+      --surface:    #0f0f0f;
+      --surface2:   #141414;
+      --border:     #1a1a1a;
+      --border2:    #242424;
+      --text:       #f2f0eb;
+      --muted:      #4a4a4a;
+      --muted2:     #7a7a7a;
+      --accent:     #f97316;
+      --accent2:    #fb923c;
+      --accent-glow:rgba(249,115,22,0.18);
+      --accent-dim: rgba(249,115,22,0.08);
       --font: 'Inter', system-ui, sans-serif;
       --mono: 'JetBrains Mono', monospace;
     }
@@ -37,153 +38,188 @@
       overflow-x: hidden;
     }
 
-    /* ── NOISE TEXTURE OVERLAY ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-      opacity: 0.025;
-      pointer-events: none;
-      z-index: 100;
-    }
-
     /* ── HERO ── */
     .hero {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
+      justify-content: flex-end;
       padding: 80px clamp(24px, 8vw, 120px);
+      padding-top: 140px;
       border-bottom: 1px solid var(--border);
       position: relative;
       overflow: hidden;
     }
 
-    .hero-bg {
+    /* Fondo: textura grain + gradiente radial lateral */
+    .hero::before {
+      content: '';
       position: absolute;
       inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 100% 50%, rgba(249,115,22,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 0% 100%, rgba(249,115,22,0.05) 0%, transparent 60%);
       pointer-events: none;
     }
 
-    .hero-bg-orb1 {
-      position: absolute;
-      top: -20%;
-      right: -10%;
-      width: 700px;
-      height: 700px;
-      background: radial-gradient(circle, rgba(200,241,53,0.09) 0%, transparent 60%);
-      animation: orbFloat 8s ease-in-out infinite;
-    }
-
-    .hero-bg-orb2 {
-      position: absolute;
-      bottom: -30%;
-      left: -5%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(200,241,53,0.04) 0%, transparent 60%);
-      animation: orbFloat 12s ease-in-out infinite reverse;
-    }
-
-    .hero-bg-grid {
+    .hero::after {
+      content: '';
       position: absolute;
       inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-      background-size: 64px 64px;
-      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
     }
 
-    @keyframes orbFloat {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-30px) scale(1.05); }
+    /* Línea horizontal decorativa */
+    .hero-line {
+      position: absolute;
+      top: 80px;
+      left: clamp(24px, 8vw, 120px);
+      right: clamp(24px, 8vw, 120px);
+      height: 1px;
+      background: var(--border);
+      opacity: 0;
+      animation: fadeIn 0.4s ease forwards 0.1s;
     }
 
-    .hero-label {
-      display: inline-flex;
+    .hero-line::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 80px;
+      height: 1px;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+    }
+
+    .hero-top-meta {
+      position: absolute;
+      top: 80px;
+      left: clamp(24px, 8vw, 120px);
+      right: clamp(24px, 8vw, 120px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 20px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards 0.3s;
+    }
+
+    .hero-brand {
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted2);
+    }
+
+    .hero-brand span { color: var(--accent); }
+
+    .hero-tag {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 40px;
-      opacity: 0;
-      transform: translateY(16px);
-      animation: fadeUp 0.6s ease forwards 0.2s;
     }
 
-    .hero-label::before {
+    .hero-tag::before {
       content: '';
-      display: inline-block;
-      width: 6px;
-      height: 6px;
+      width: 5px; height: 5px;
       border-radius: 50%;
       background: var(--accent);
-      box-shadow: 0 0 8px var(--accent);
-      animation: pulse 2s ease infinite;
+      box-shadow: 0 0 6px var(--accent);
+      animation: blink 2s ease infinite;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--accent); }
-      50% { opacity: 0.4; box-shadow: 0 0 2px var(--accent); }
+    @keyframes blink {
+      0%,100% { opacity:1; } 50% { opacity:0.3; }
+    }
+
+    /* Número grande de fondo */
+    .hero-bg-num {
+      position: absolute;
+      right: clamp(24px, 4vw, 80px);
+      bottom: 60px;
+      font-size: clamp(180px, 25vw, 320px);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.06em;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(249,115,22,0.07);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; }
+
+    .hero-eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.5s ease forwards 0.5s;
     }
 
     .hero h1 {
-      font-size: clamp(2.6rem, 6.5vw, 5.5rem);
-      font-weight: 800;
-      line-height: 1.05;
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 900;
+      line-height: 1.0;
       letter-spacing: -0.04em;
-      max-width: 860px;
+      max-width: 1000px;
       opacity: 0;
       transform: translateY(20px);
-      animation: fadeUp 0.7s ease forwards 0.4s;
+      animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) forwards 0.6s;
     }
 
-    .hero h1 em {
-      font-style: normal;
-      color: var(--accent);
-      position: relative;
+    /* Gradiente solo en la parte clave del título */
+    .hero h1 .grad {
+      background: linear-gradient(135deg, var(--accent) 0%, #fbbf24 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .hero-sub {
-      margin-top: 28px;
-      font-size: 1.1rem;
+      margin-top: 32px;
+      font-size: clamp(1rem, 2vw, 1.15rem);
       color: var(--muted2);
-      max-width: 520px;
+      max-width: 500px;
       line-height: 1.8;
       opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 0.7s ease forwards 0.6s;
+      transform: translateY(16px);
+      animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) forwards 0.8s;
     }
 
-    .hero-meta {
-      margin-top: 56px;
+    .hero-bottom {
+      margin-top: 64px;
       display: flex;
       align-items: center;
-      gap: 32px;
+      justify-content: space-between;
       opacity: 0;
-      animation: fadeUp 0.7s ease forwards 0.9s;
+      animation: fadeUp 0.6s ease forwards 1.1s;
     }
 
+    .hero-badges { display: flex; gap: 10px; flex-wrap: wrap; }
+
     .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       color: var(--muted2);
-      padding: 8px 16px;
+      padding: 7px 14px;
       border: 1px solid var(--border2);
       border-radius: 100px;
       background: var(--surface);
     }
 
-    .hero-badge span { color: var(--accent); font-weight: 600; }
-
-    .hero-scroll-hint {
+    .hero-scroll {
       font-size: 12px;
       color: var(--muted);
       display: flex;
@@ -191,15 +227,14 @@
       gap: 10px;
     }
 
-    .hero-scroll-hint::before {
+    .hero-scroll::before {
       content: '';
       display: block;
-      width: 24px;
-      height: 1px;
+      width: 32px; height: 1px;
       background: var(--muted);
     }
 
-    /* ── SECTION BASE ── */
+    /* ── SECCIÓN BASE ── */
     .section {
       padding: 100px clamp(24px, 8vw, 120px);
     }
@@ -217,25 +252,24 @@
 
     .section-label::after {
       content: '';
-      flex: 1;
-      max-width: 48px;
-      height: 1px;
+      display: block;
+      width: 32px; height: 1px;
       background: var(--border2);
     }
 
-    /* ── COMPONENTS ── */
-    .components { display: grid; gap: 0; }
+    /* ── COMPONENTES ── */
+    .components { display: grid; }
 
     .component {
       display: grid;
-      grid-template-columns: 80px 1fr;
+      grid-template-columns: 72px 1fr;
       gap: 40px;
       align-items: start;
       padding: 44px 0;
       border-top: 1px solid var(--border);
       opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1);
+      transform: translateY(24px);
+      transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
     }
 
     .component.visible { opacity: 1; transform: translateY(0); }
@@ -253,8 +287,6 @@
 
     .component-tag {
       display: inline-flex;
-      align-items: center;
-      gap: 6px;
       font-size: 10px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
@@ -268,136 +300,158 @@
     }
 
     .component:hover .component-tag {
-      border-color: rgba(200,241,53,0.2);
-      color: var(--accent);
+      border-color: rgba(249,115,22,0.25);
+      color: var(--accent2);
     }
 
     .component h2 {
-      font-size: 1.6rem;
+      font-size: clamp(1.4rem, 2.5vw, 1.75rem);
       font-weight: 700;
       letter-spacing: -0.025em;
       margin-bottom: 12px;
-      line-height: 1.25;
-      transition: color 0.3s;
+      line-height: 1.2;
     }
 
     .component p {
       color: var(--muted2);
       font-size: 0.95rem;
-      max-width: 580px;
+      max-width: 560px;
       line-height: 1.8;
     }
 
-    /* ── TRIGGER HIGHLIGHT ── */
-    .component.trigger-highlight {
+    /* ── TRIGGER — COMPONENTE ESTRELLA ── */
+    .trigger-wrap {
       grid-column: 1 / -1;
-      display: block;
-      background: linear-gradient(135deg, rgba(200,241,53,0.06) 0%, rgba(200,241,53,0.02) 100%);
-      border: 1px solid rgba(200,241,53,0.15) !important;
-      border-radius: 16px;
-      padding: 48px;
-      margin: 16px 0;
+      margin: 20px 0;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .trigger-wrap.visible { opacity: 1; transform: translateY(0); }
+
+    .trigger-card {
       position: relative;
+      background: var(--surface);
+      border: 1px solid rgba(249,115,22,0.2);
+      border-radius: 20px;
+      padding: 52px 48px;
       overflow: hidden;
     }
 
-    .trigger-highlight::before {
+    .trigger-card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 2px;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 100% 0%, rgba(249,115,22,0.1) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 0% 100%, rgba(251,146,60,0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .trigger-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 48px; right: 48px;
+      height: 1px;
       background: linear-gradient(90deg, transparent, var(--accent), transparent);
     }
 
-    .trigger-highlight::after {
-      content: '★ El más ignorado';
+    .trigger-label {
       position: absolute;
       top: 20px; right: 24px;
       font-size: 10px;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--accent);
-      opacity: 0.6;
+      color: rgba(249,115,22,0.5);
       font-family: var(--mono);
     }
 
-    .trigger-highlight .trigger-inner {
+    .trigger-inner {
       display: grid;
-      grid-template-columns: 80px 1fr;
+      grid-template-columns: 72px 1fr;
       gap: 40px;
-      align-items: start;
+      position: relative;
     }
 
-    .trigger-highlight .component-num { color: rgba(200,241,53,0.3); }
-    .trigger-highlight .component-tag {
-      color: var(--accent);
-      border-color: rgba(200,241,53,0.25);
-      background: rgba(200,241,53,0.06);
+    .trigger-num {
+      font-size: 12px;
+      color: rgba(249,115,22,0.3);
+      font-family: var(--mono);
+      padding-top: 6px;
     }
-    .trigger-highlight h2 { font-size: 2rem; color: var(--text); }
-    .trigger-highlight p { color: #aaa; max-width: 600px; }
+
+    .trigger-card .component-tag {
+      color: var(--accent);
+      border-color: rgba(249,115,22,0.3);
+      background: var(--accent-dim);
+    }
+
+    .trigger-card h2 {
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+      line-height: 1.15;
+    }
+
+    .trigger-card p { color: #999; max-width: 580px; line-height: 1.8; }
 
     /* ── CODE BLOCK ── */
     .code-block {
       margin-top: 28px;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.5);
       border: 1px solid var(--border2);
-      border-radius: 10px;
+      border-radius: 12px;
       overflow: hidden;
-      backdrop-filter: blur(8px);
     }
 
-    .code-block-header {
+    .code-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 10px 16px;
       border-bottom: 1px solid var(--border);
       font-size: 11px;
-      color: var(--muted);
+      color: var(--muted2);
       font-family: var(--mono);
       background: rgba(255,255,255,0.02);
     }
 
-    .code-dots { display: flex; gap: 6px; }
-    .code-dots span {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--border2);
-    }
-    .code-dots span:nth-child(1) { background: #ff5f57; }
-    .code-dots span:nth-child(2) { background: #febc2e; }
-    .code-dots span:nth-child(3) { background: #28c840; }
+    .dots { display: flex; gap: 6px; }
+    .dots span { width: 10px; height: 10px; border-radius: 50%; }
+    .dots span:nth-child(1) { background: #ff5f57; }
+    .dots span:nth-child(2) { background: #febc2e; }
+    .dots span:nth-child(3) { background: #28c840; }
 
-    .code-block pre {
-      padding: 22px;
+    pre {
+      padding: 24px;
       font-family: var(--mono);
       font-size: 13px;
-      line-height: 1.8;
-      color: #888;
+      line-height: 1.85;
+      color: #666;
       overflow-x: auto;
     }
 
-    .code-block pre .bad { color: #ff6b6b; }
-    .code-block pre .good { color: var(--accent); }
-    .code-block pre .comment { color: #3a3a3a; }
-    .code-block pre .key { color: #7dd3fc; }
+    pre .bad     { color: #f87171; }
+    pre .good    { color: var(--accent); }
+    pre .comment { color: #333; }
 
     /* ── CHEATSHEET ── */
-    .cheatsheet-section {
+    .cheat-section {
       background: var(--surface);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
 
-    .cheatsheet-grid {
+    .cheat-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border-radius: 14px;
-      overflow: hidden;
       border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--border);
+      gap: 1px;
     }
 
     .cheat-card {
@@ -405,23 +459,22 @@
       padding: 28px 22px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      transition: background 0.25s ease;
-      cursor: default;
+      gap: 8px;
+      transition: background 0.2s;
     }
 
     .cheat-card:hover { background: var(--surface2); }
 
-    .cheat-num {
+    .cheat-n {
       font-size: 10px;
       color: var(--border2);
       font-family: var(--mono);
-      transition: color 0.25s;
+      transition: color 0.2s;
     }
 
-    .cheat-card:hover .cheat-num { color: var(--muted); }
+    .cheat-card:hover .cheat-n { color: var(--muted); }
 
-    .cheat-tag {
+    .cheat-t {
       font-size: 10px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
@@ -429,29 +482,28 @@
     }
 
     .cheat-card h3 {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 600;
-      letter-spacing: -0.015em;
+      letter-spacing: -0.01em;
       line-height: 1.3;
     }
 
     .cheat-card p {
       font-size: 0.8rem;
       color: var(--muted);
-      line-height: 1.65;
+      line-height: 1.6;
     }
 
     .cheat-card.star {
-      background: linear-gradient(135deg, rgba(200,241,53,0.09), rgba(200,241,53,0.03));
-      border-left: 2px solid rgba(200,241,53,0.3);
-      position: relative;
+      background: linear-gradient(135deg, rgba(249,115,22,0.1), rgba(249,115,22,0.04));
+      border-left: 2px solid rgba(249,115,22,0.35);
     }
 
     .cheat-card.star h3 { color: var(--accent); }
-    .cheat-card.star .cheat-tag { color: rgba(200,241,53,0.6); }
-    .cheat-card.star p { color: #999; }
+    .cheat-card.star .cheat-t { color: rgba(249,115,22,0.6); }
+    .cheat-card.star p { color: #888; }
 
-    /* ── AUTHOR ── */
+    /* ── AUTHOR / CIERRE ── */
     .author-section {
       padding: 100px clamp(24px, 8vw, 120px);
       border-top: 1px solid var(--border);
@@ -459,168 +511,171 @@
       overflow: hidden;
     }
 
-    .author-section-bg {
+    .author-section::before {
+      content: '';
       position: absolute;
-      bottom: -100px;
-      left: 50%;
+      bottom: -80px; left: 50%;
       transform: translateX(-50%);
-      width: 800px;
-      height: 400px;
-      background: radial-gradient(ellipse, rgba(200,241,53,0.05) 0%, transparent 65%);
+      width: 800px; height: 400px;
+      background: radial-gradient(ellipse, rgba(249,115,22,0.06) 0%, transparent 65%);
       pointer-events: none;
     }
 
     .author-top {
       display: flex;
       align-items: flex-start;
-      gap: 24px;
-      margin-bottom: 52px;
-      max-width: 600px;
+      gap: 20px;
+      margin-bottom: 48px;
+      max-width: 560px;
     }
 
     .author-avatar {
-      width: 56px;
-      height: 56px;
-      min-width: 56px;
+      width: 52px; height: 52px; min-width: 52px;
       border-radius: 50%;
       background: var(--accent-dim);
-      border: 1px solid rgba(200,241,53,0.2);
+      border: 1px solid rgba(249,115,22,0.25);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--accent);
       letter-spacing: 0.05em;
     }
 
-    .author-info { display: flex; flex-direction: column; gap: 6px; }
-
     .author-name {
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.95rem;
       letter-spacing: -0.01em;
     }
 
     .author-bio {
-      font-size: 0.88rem;
+      margin-top: 4px;
+      font-size: 0.85rem;
       color: var(--muted2);
       line-height: 1.75;
     }
 
     /* ── SOCIAL CARDS ── */
-    .social-cards {
+    .social-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      max-width: 720px;
+      max-width: 680px;
     }
 
-    .social-card {
+    .scard {
       display: flex;
       flex-direction: column;
-      gap: 0;
-      padding: 0;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 16px;
+      overflow: hidden;
       text-decoration: none;
       color: var(--text);
-      transition: border-color 0.3s, transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s;
-      overflow: hidden;
-      position: relative;
+      transition: border-color 0.3s, transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s;
+      opacity: 0;
+      transform: translateY(20px);
     }
 
-    .social-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    .scard.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    .social-card-top {
-      height: 80px;
-      position: relative;
+    .scard:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+    }
+
+    .scard.linkedin:hover  { border-color: rgba(10,102,194,0.5); }
+    .scard.instagram:hover { border-color: rgba(225,48,108,0.4); }
+    .scard.tiktok:hover    { border-color: rgba(255,255,255,0.12); }
+
+    .scard-head {
+      height: 88px;
       display: flex;
       align-items: flex-end;
       padding: 16px;
+      position: relative;
     }
 
-    .social-card.linkedin .social-card-top {
-      background: linear-gradient(135deg, rgba(10,102,194,0.25) 0%, rgba(10,102,194,0.08) 100%);
+    .scard.linkedin .scard-head {
+      background: linear-gradient(135deg, rgba(10,102,194,0.3) 0%, rgba(10,102,194,0.08) 100%);
       border-bottom: 1px solid rgba(10,102,194,0.15);
     }
 
-    .social-card.instagram .social-card-top {
-      background: linear-gradient(135deg, rgba(225,48,108,0.2) 0%, rgba(253,165,10,0.1) 100%);
+    .scard.instagram .scard-head {
+      background: linear-gradient(135deg, rgba(225,48,108,0.25) 0%, rgba(253,165,10,0.12) 100%);
       border-bottom: 1px solid rgba(225,48,108,0.12);
     }
 
-    .social-card.tiktok .social-card-top {
-      background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(0,0,0,0) 100%);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+    .scard.tiktok .scard-head {
+      background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0) 100%);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 
-    .social-card:hover.linkedin { border-color: rgba(10,102,194,0.4); }
-    .social-card:hover.instagram { border-color: rgba(225,48,108,0.35); }
-    .social-card:hover.tiktok { border-color: rgba(255,255,255,0.15); }
-
-    .social-card-icon {
-      width: 38px;
-      height: 38px;
+    .scard-icon {
+      width: 36px; height: 36px;
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .social-card.linkedin .social-card-icon { background: rgba(10,102,194,0.2); }
-    .social-card.instagram .social-card-icon { background: rgba(225,48,108,0.15); }
-    .social-card.tiktok .social-card-icon { background: rgba(255,255,255,0.08); }
+    .scard.linkedin .scard-icon  { background: rgba(10,102,194,0.2); }
+    .scard.instagram .scard-icon { background: rgba(225,48,108,0.15); }
+    .scard.tiktok .scard-icon    { background: rgba(255,255,255,0.07); }
 
-    .social-card-icon svg { width: 18px; height: 18px; }
+    .scard-icon svg { width: 17px; height: 17px; }
 
-    .social-card-body {
+    .scard-body {
       padding: 16px;
+      flex: 1;
       display: flex;
       flex-direction: column;
       gap: 4px;
-      flex: 1;
     }
 
-    .social-card-name {
+    .scard-name {
       font-size: 0.9rem;
       font-weight: 600;
       letter-spacing: -0.01em;
     }
 
-    .social-card-handle {
+    .scard-handle {
       font-size: 0.75rem;
       color: var(--muted2);
       font-family: var(--mono);
     }
 
-    .social-card-footer {
+    .scard-desc {
+      margin-top: 8px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .scard-footer {
       padding: 12px 16px;
       border-top: 1px solid var(--border);
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       font-size: 11px;
       color: var(--muted);
-      transition: color 0.2s;
     }
 
-    .social-card:hover .social-card-footer { color: var(--muted2); }
-
-    .social-card-arrow {
+    .scard-arrow {
       font-size: 14px;
       transition: transform 0.25s;
     }
 
-    .social-card:hover .social-card-arrow { transform: translate(2px, -2px); }
+    .scard:hover .scard-arrow { transform: translate(2px, -2px); }
 
     /* ── FOOTER ── */
     footer {
-      padding: 32px clamp(24px, 8vw, 120px);
+      padding: 28px clamp(24px, 8vw, 120px);
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
@@ -631,68 +686,86 @@
       gap: 12px;
     }
 
-    footer a {
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
+    footer a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
     footer a:hover { color: var(--muted2); }
-
     .footer-links { display: flex; gap: 20px; }
 
-    /* ── ANIMATIONS ── */
+    /* ── ANIMACIONES ── */
     @keyframes fadeUp {
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .cheatsheet-grid { grid-template-columns: repeat(2, 1fr); }
+    @keyframes fadeIn {
+      to { opacity: 1; }
     }
 
-    @media (max-width: 600px) {
-      .component { grid-template-columns: 1fr; gap: 16px; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .cheat-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      .component { grid-template-columns: 1fr; gap: 14px; }
       .component-num { display: none; }
-      .trigger-highlight { padding: 28px 20px; }
-      .trigger-highlight .trigger-inner { grid-template-columns: 1fr; gap: 16px; }
-      .trigger-highlight .trigger-num { display: none; }
-      .cheatsheet-grid { grid-template-columns: 1fr; }
-      .social-cards { grid-template-columns: 1fr; }
+      .trigger-inner { grid-template-columns: 1fr; gap: 14px; }
+      .trigger-num { display: none; }
+      .trigger-card { padding: 36px 24px; }
+      .cheat-grid { grid-template-columns: 1fr; }
+      .social-grid { grid-template-columns: 1fr; }
       .author-top { flex-direction: column; gap: 16px; }
-      .hero-meta { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .hero-bottom { flex-direction: column; gap: 20px; align-items: flex-start; }
+      .hero-bg-num { display: none; }
+      .hero-top-meta { flex-direction: column; gap: 8px; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
 
-  <!-- HERO -->
+  <!-- ══ HERO ══ -->
   <section class="hero">
-    <div class="hero-bg">
-      <div class="hero-bg-orb1"></div>
-      <div class="hero-bg-orb2"></div>
-      <div class="hero-bg-grid"></div>
+    <div class="hero-line"></div>
+    <div class="hero-top-meta">
+      <span class="hero-brand">Ascanio<span>.</span>IA</span>
+      <span class="hero-tag">Guía gratuita</span>
     </div>
 
-    <p class="hero-label">Ascanio.IA — Guía gratuita</p>
-    <h1>Los <em>7 componentes</em> de un Skill de Claude que realmente funciona</h1>
-    <p class="hero-sub">La mayoría usa solo 3. Aquí están los 7 — y por qué el que más se ignora es el que lo decide todo.</p>
+    <div class="hero-bg-num">7</div>
 
-    <div class="hero-meta">
-      <div class="hero-badge">Lectura <span>5 min</span></div>
-      <div class="hero-badge">Gratis <span>100%</span></div>
-      <div class="hero-scroll-hint">Scroll para empezar</div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Skill de Claude — Los 7 componentes</p>
+      <h1>
+        La diferencia<br>
+        está en una<br>
+        <span class="grad">sola línea.</span>
+      </h1>
+      <p class="hero-sub">La mayoría construye skills con 3 componentes y se pregunta por qué Claude no les hace caso. Aquí están los 7 — y por qué el más ignorado es el que lo decide todo.</p>
+
+      <div class="hero-bottom">
+        <div class="hero-badges">
+          <span class="hero-badge">Lectura 5 min</span>
+          <span class="hero-badge">Gratis</span>
+          <span class="hero-badge">Claude Code</span>
+        </div>
+        <div class="hero-scroll">Scroll para empezar</div>
+      </div>
     </div>
   </section>
 
-  <!-- COMPONENTS -->
+  <!-- ══ COMPONENTES ══ -->
   <section class="section">
     <p class="section-label">Los 7 componentes</p>
     <div class="components">
 
       <div class="component">
         <div class="component-num">01</div>
-        <div class="component-content">
+        <div>
           <span class="component-tag">Identidad</span>
           <h2>YAML Frontmatter</h2>
           <p>El carnet de identidad del skill. Le dice a Claude cómo se llama y cuándo debe cargarlo. Sin frontmatter claro, Claude ignora el skill por completo — aunque el resto esté perfecto.</p>
@@ -701,7 +774,7 @@
 
       <div class="component">
         <div class="component-num">02</div>
-        <div class="component-content">
+        <div>
           <span class="component-tag">El cerebro</span>
           <h2>Instructions Block</h2>
           <p>Le dices exactamente qué hacer y qué nunca hacer dentro de este skill. Cuanto más específico, menos margen para la improvisación.</p>
@@ -710,7 +783,7 @@
 
       <div class="component">
         <div class="component-num">03</div>
-        <div class="component-content">
+        <div>
           <span class="component-tag">El atajo</span>
           <h2>Examples Section</h2>
           <p>Muestra a Claude un input de ejemplo y el output exacto que esperas. Dos ejemplos bien elegidos reducen los errores a la mitad.</p>
@@ -719,35 +792,37 @@
 
       <div class="component">
         <div class="component-num">04</div>
-        <div class="component-content">
+        <div>
           <span class="component-tag">Contexto</span>
           <h2>Supporting Files</h2>
           <p>Plantillas, scripts, documentos de referencia. En lugar de pegar todo en un bloque, enlaza archivos externos. El skill se mantiene limpio y el contexto siempre actualizado.</p>
         </div>
       </div>
 
-      <!-- TRIGGER HIGHLIGHT -->
-      <div class="component trigger-highlight">
-        <div class="trigger-inner">
-          <div class="component-num trigger-num">05</div>
-          <div class="component-content">
-            <span class="component-tag">El más ignorado</span>
-            <h2>Trigger Rule</h2>
-            <p>Claude lee esta descripción para decidir si debe activar el skill o no. Es el componente más ignorado — y el que decide si todo lo demás funciona.</p>
-            <p style="margin-top:12px;">Si es vaga, Claude la ignora. Si es genérica, carga el skill cuando no toca. Si es precisa, actúa exactamente cuando debe.</p>
-            <div class="code-block">
-              <div class="code-block-header">
-                <div class="code-dots"><span></span><span></span><span></span></div>
-                trigger_rule.md
-              </div>
-              <pre><span class="comment"># ✗ Mal — demasiado vago</span>
+      <!-- TRIGGER -->
+      <div class="trigger-wrap">
+        <div class="trigger-card">
+          <span class="trigger-label">★ El más ignorado</span>
+          <div class="trigger-inner">
+            <div class="trigger-num">05</div>
+            <div>
+              <span class="component-tag">Trigger Rule</span>
+              <h2>El componente que<br>decide si todo funciona.</h2>
+              <p>Claude lee esta descripción para decidir si debe activar el skill o no. Si es vaga, lo ignora. Si es genérica, lo carga cuando no toca. Si es precisa, actúa exactamente cuando debe.</p>
+              <div class="code-block">
+                <div class="code-header">
+                  <div class="dots"><span></span><span></span><span></span></div>
+                  <span>trigger_rule.md</span>
+                </div>
+                <pre><span class="comment"># ✗  Mal — demasiado vago</span>
 <span class="bad">trigger: "usar cuando el usuario pida ayuda con marketing"</span>
 
-<span class="comment"># ✓ Bien — preciso y accionable</span>
+<span class="comment"># ✓  Bien — preciso y accionable</span>
 <span class="good">trigger: |
   Activar cuando el usuario pida un post para LinkedIn.
   NO activar para emails, newsletters o Instagram.
-  Señales: menciona "LinkedIn", "post", "publicación".</span></pre>
+  Señales clave: "LinkedIn", "post", "publicación".</span></pre>
+              </div>
             </div>
           </div>
         </div>
@@ -755,7 +830,7 @@
 
       <div class="component">
         <div class="component-num">06</div>
-        <div class="component-content">
+        <div>
           <span class="component-tag">Mata-errores</span>
           <h2>Negative Instructions</h2>
           <p>Dile a Claude qué no hacer. Esta sección previene el 80% de los outputs incorrectos. Si hay algo que Claude hace por defecto y tú no quieres, aquí es donde se corta.</p>
@@ -764,82 +839,80 @@
 
       <div class="component">
         <div class="component-num">07</div>
-        <div class="component-content">
+        <div>
           <span class="component-tag">El multiplicador</span>
           <h2>Composability</h2>
-          <p>Los skills pueden trabajar juntos. Claude puede cargar varios a la vez. Un skill de voz + un skill de formato + un skill de canal = un sistema que trabaja como tú, no como Claude por defecto.</p>
+          <p>Los skills pueden trabajar juntos. Claude puede cargar varios a la vez. Un skill de voz + formato + canal = un sistema que trabaja como tú, no como Claude por defecto.</p>
         </div>
       </div>
 
     </div>
   </section>
 
-  <!-- CHEATSHEET -->
-  <section class="section cheatsheet-section">
+  <!-- ══ CHEATSHEET ══ -->
+  <section class="section cheat-section">
     <p class="section-label">Referencia rápida</p>
-    <div class="cheatsheet-grid">
+    <div class="cheat-grid">
       <div class="cheat-card">
-        <span class="cheat-num">01</span>
-        <span class="cheat-tag">Identidad</span>
+        <span class="cheat-n">01</span>
+        <span class="cheat-t">Identidad</span>
         <h3>YAML Frontmatter</h3>
-        <p>El ID del skill. Sin esto, Claude lo ignora por completo.</p>
+        <p>El ID del skill. Sin esto, Claude lo ignora.</p>
       </div>
       <div class="cheat-card">
-        <span class="cheat-num">02</span>
-        <span class="cheat-tag">El cerebro</span>
+        <span class="cheat-n">02</span>
+        <span class="cheat-t">El cerebro</span>
         <h3>Instructions Block</h3>
-        <p>Qué hacer y qué nunca hacer. Cuanto más concreto, mejor.</p>
+        <p>Qué hacer y qué no. Cuanto más concreto, mejor.</p>
       </div>
       <div class="cheat-card">
-        <span class="cheat-num">03</span>
-        <span class="cheat-tag">El atajo</span>
+        <span class="cheat-n">03</span>
+        <span class="cheat-t">El atajo</span>
         <h3>Examples Section</h3>
         <p>Input → output exacto. Dos ejemplos reducen errores a la mitad.</p>
       </div>
       <div class="cheat-card">
-        <span class="cheat-num">04</span>
-        <span class="cheat-tag">Contexto</span>
+        <span class="cheat-n">04</span>
+        <span class="cheat-t">Contexto</span>
         <h3>Supporting Files</h3>
-        <p>Enlaza archivos externos. No lo pegues todo en un bloque.</p>
+        <p>Archivos enlazados, no pegados en un bloque.</p>
       </div>
       <div class="cheat-card star">
-        <span class="cheat-num">05</span>
-        <span class="cheat-tag">El más ignorado</span>
+        <span class="cheat-n">05</span>
+        <span class="cheat-t">El más ignorado</span>
         <h3>Trigger Rule</h3>
-        <p>Cuándo activarse y cuándo no. Si es vaga, todo lo demás falla.</p>
+        <p>Cuándo activarse y cuándo no. Si falla esto, falla todo.</p>
       </div>
       <div class="cheat-card">
-        <span class="cheat-num">06</span>
-        <span class="cheat-tag">Mata-errores</span>
+        <span class="cheat-n">06</span>
+        <span class="cheat-t">Mata-errores</span>
         <h3>Negative Instructions</h3>
-        <p>Lo que Claude no debe hacer. Previene el 80% de outputs incorrectos.</p>
+        <p>Lo que Claude no debe hacer. Previene el 80% de errores.</p>
       </div>
       <div class="cheat-card">
-        <span class="cheat-num">07</span>
-        <span class="cheat-tag">Multiplicador</span>
+        <span class="cheat-n">07</span>
+        <span class="cheat-t">Multiplicador</span>
         <h3>Composability</h3>
-        <p>Los skills se combinan. Voz + formato + canal = sistema propio.</p>
+        <p>Combina skills. Voz + formato + canal = sistema propio.</p>
       </div>
     </div>
   </section>
 
-  <!-- CIERRE PERSONAL -->
+  <!-- ══ CIERRE PERSONAL ══ -->
   <section class="author-section">
-    <div class="author-section-bg"></div>
-
     <div class="author-top">
       <div class="author-avatar">JA</div>
-      <div class="author-info">
+      <div>
         <p class="author-name">Jose Ascanio</p>
-        <p class="author-bio">Consultor de IA para empresas con procesos desordenados. Método ODIN: primero el orden, luego la automatización. Aquí publico lo que aprendo construyendo en público.</p>
+        <p class="author-bio">Consultor de IA para empresas con procesos desordenados. Método ODIN: primero el orden, luego la automatización.</p>
       </div>
     </div>
 
-    <div class="social-cards">
+    <div class="social-grid">
 
-      <a class="social-card linkedin" href="https://www.linkedin.com/in/joseascanioc/" target="_blank">
-        <div class="social-card-top">
-          <div class="social-card-icon">
+      <a class="scard linkedin" href="https://www.linkedin.com/in/joseascanioc/" target="_blank">
+        <div class="scard-head">
+          <div class="scard-icon">
             <svg viewBox="0 0 24 24" fill="none">
               <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" stroke="#4fa3e0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               <rect x="2" y="9" width="4" height="12" stroke="#4fa3e0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -847,19 +920,20 @@
             </svg>
           </div>
         </div>
-        <div class="social-card-body">
-          <span class="social-card-name">LinkedIn</span>
-          <span class="social-card-handle">@joseascanioc</span>
+        <div class="scard-body">
+          <span class="scard-name">LinkedIn</span>
+          <span class="scard-handle">@joseascanioc</span>
+          <span class="scard-desc">Contenido B2B sobre IA aplicada a empresas</span>
         </div>
-        <div class="social-card-footer">
-          <span>Contenido B2B · Consultoría IA</span>
-          <span class="social-card-arrow">↗</span>
+        <div class="scard-footer">
+          <span>Seguir</span>
+          <span class="scard-arrow">↗</span>
         </div>
       </a>
 
-      <a class="social-card instagram" href="https://www.instagram.com/ascanio.ia/" target="_blank">
-        <div class="social-card-top">
-          <div class="social-card-icon">
+      <a class="scard instagram" href="https://www.instagram.com/ascanio.ia/" target="_blank">
+        <div class="scard-head">
+          <div class="scard-icon">
             <svg viewBox="0 0 24 24" fill="none">
               <rect x="2" y="2" width="20" height="20" rx="5" stroke="#e1608a" stroke-width="1.5"/>
               <circle cx="12" cy="12" r="4" stroke="#e1608a" stroke-width="1.5"/>
@@ -867,40 +941,42 @@
             </svg>
           </div>
         </div>
-        <div class="social-card-body">
-          <span class="social-card-name">Instagram</span>
-          <span class="social-card-handle">@ascanio.ia</span>
+        <div class="scard-body">
+          <span class="scard-name">Instagram</span>
+          <span class="scard-handle">@ascanio.ia</span>
+          <span class="scard-desc">Visual, casos prácticos y proceso en público</span>
         </div>
-        <div class="social-card-footer">
-          <span>Visual · Casos prácticos</span>
-          <span class="social-card-arrow">↗</span>
+        <div class="scard-footer">
+          <span>Seguir</span>
+          <span class="scard-arrow">↗</span>
         </div>
       </a>
 
-      <a class="social-card tiktok" href="https://www.tiktok.com/@ascanioia" target="_blank">
-        <div class="social-card-top">
-          <div class="social-card-icon">
+      <a class="scard tiktok" href="https://www.tiktok.com/@ascanioia" target="_blank">
+        <div class="scard-head">
+          <div class="scard-icon">
             <svg viewBox="0 0 24 24" fill="none">
               <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" stroke="#e0e0e0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
         </div>
-        <div class="social-card-body">
-          <span class="social-card-name">TikTok</span>
-          <span class="social-card-handle">@ascanioia</span>
+        <div class="scard-body">
+          <span class="scard-name">TikTok</span>
+          <span class="scard-handle">@ascanioia</span>
+          <span class="scard-desc">Vídeo corto sobre IA aplicada, sin filtros</span>
         </div>
-        <div class="social-card-footer">
-          <span>Vídeo corto · IA aplicada</span>
-          <span class="social-card-arrow">↗</span>
+        <div class="scard-footer">
+          <span>Seguir</span>
+          <span class="scard-arrow">↗</span>
         </div>
       </a>
 
     </div>
   </section>
 
-  <!-- FOOTER -->
+  <!-- ══ FOOTER ══ -->
   <footer>
-    <span>© 2026 Ascanio.IA — Jose Ascanio</span>
+    <span>© 2026 Ascanio.IA</span>
     <div class="footer-links">
       <a href="https://www.linkedin.com/in/joseascanioc/" target="_blank">LinkedIn</a>
       <a href="https://www.instagram.com/ascanio.ia/" target="_blank">Instagram</a>
@@ -909,63 +985,50 @@
   </footer>
 
   <script>
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => entry.target.classList.add('visible'), entry.target.dataset.delay || 0);
-          observer.unobserve(entry.target);
+    // Componentes principales
+    const compObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), +e.target.dataset.delay || 0);
+          compObs.unobserve(e.target);
         }
       });
     }, { threshold: 0.08 });
 
-    document.querySelectorAll('.component:not(.trigger-highlight)').forEach((el, i) => {
-      el.dataset.delay = i * 90;
-      observer.observe(el);
+    document.querySelectorAll('.component').forEach((el, i) => {
+      el.dataset.delay = i * 80;
+      compObs.observe(el);
     });
 
-    // Trigger highlight animación propia
-    const trigger = document.querySelector('.trigger-highlight');
-    if (trigger) {
-      trigger.style.opacity = '0';
-      trigger.style.transform = 'translateY(28px)';
-      trigger.style.transition = 'opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)';
-      const triggerObs = new IntersectionObserver(([e]) => {
-        if (e.isIntersecting) {
-          setTimeout(() => { trigger.style.opacity = '1'; trigger.style.transform = 'translateY(0)'; }, 100);
-          triggerObs.unobserve(trigger);
-        }
-      }, { threshold: 0.1 });
-      triggerObs.observe(trigger);
-    }
+    // Trigger card
+    const triggerObs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        triggerObs.unobserve(e.target);
+      }
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.trigger-wrap').forEach(el => triggerObs.observe(el));
 
-    // Cheat cards reveal
+    // Cheat cards
     document.querySelectorAll('.cheat-card').forEach((el, i) => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(16px)';
-      el.style.transition = `opacity 0.5s ease ${i * 60}ms, transform 0.5s ease ${i * 60}ms`;
+      el.style.cssText = `opacity:0; transform:translateY(14px); transition: opacity 0.5s ease ${i*55}ms, transform 0.5s ease ${i*55}ms, background 0.2s`;
       const obs = new IntersectionObserver(([e]) => {
-        if (e.isIntersecting) {
-          el.style.opacity = '1';
-          el.style.transform = 'translateY(0)';
-          obs.unobserve(el);
-        }
+        if (e.isIntersecting) { el.style.opacity='1'; el.style.transform='translateY(0)'; obs.unobserve(el); }
       }, { threshold: 0.1 });
       obs.observe(el);
     });
 
-    // Social cards reveal
-    document.querySelectorAll('.social-card').forEach((el, i) => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(20px)';
-      el.style.transition = `opacity 0.6s cubic-bezier(0.16,1,0.3,1) ${i * 100}ms, transform 0.6s cubic-bezier(0.16,1,0.3,1) ${i * 100}ms, border-color 0.3s, box-shadow 0.3s`;
-      const obs = new IntersectionObserver(([e]) => {
-        if (e.isIntersecting) {
-          el.style.opacity = '1';
-          el.style.transform = 'translateY(0)';
-          obs.unobserve(el);
-        }
-      }, { threshold: 0.1 });
-      obs.observe(el);
+    // Social cards
+    document.querySelectorAll('.scard').forEach((el, i) => {
+      setTimeout(() => {
+        const obs = new IntersectionObserver(([e]) => {
+          if (e.isIntersecting) {
+            setTimeout(() => el.classList.add('visible'), i * 110);
+            obs.unobserve(el);
+          }
+        }, { threshold: 0.1 });
+        obs.observe(el);
+      }, 0);
     });
   </script>
 
